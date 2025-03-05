@@ -1,0 +1,72 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+input, select, button {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Login Icons Styles */
+.login-icons {
+  display: flex;
+  justify-content: center; /* Center the icons horizontally */
+  align-items: center; /* Align icons vertically */
+  gap: 10px; /* Space between the icons */
+  margin-top: 10px; /* Space between the "Book Now" button and the icons */
+}
+
+.login-icon {
+  width: 1000px; /* Adjust the size of the icons */
+  height: 100px; /* Adjust the size of the icons */
+  cursor: pointer;
+  align-items: center; /* Align icons vertically */
+  transition: transform 0.2s ease;
+}
+
+.login-icon:hover {
+  transform: scale(1.2); /* Slight zoom effect on hover */
+}
+

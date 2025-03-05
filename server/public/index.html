@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input, select, button {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ffe9;
+      border: 1px solid #b2d8b2;
+      border-radius: 4px;
+    }
+  </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>Car Booking</h1>
+    <form id="bookingForm">
+      <label for="startPlace">Start Place:</label>
+      <input type="text" id="startPlace" name="startPlace" placeholder="Enter start place" required>
+
+      <label for="endPlace">End Place:</label>
+      <input type="text" id="endPlace" name="endPlace" placeholder="Enter end place" required>
+
+      <label for="contactInfo">Contact Information:</label>
+      <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., email or phone)" required>
+
+      <label for="carSelect">Select a Car:</label>
+      <select id="carSelect" name="carSelect" required>
+        <option value="">-- Select a Car --</option>
+        <option value="Sedan">Sedan</option>
+        <option value="SUV">SUV</option>
+        <option value="Hatchback">Hatchback</option>
+        <option value="Luxury">Luxury</option>
+      </select>
+
+      <button type="submit">Book Now</button>
+    </form>
+    <!-- Login Icon -->
+    <!-- <div class="login-container">
+      <img src="login/wechat.png" alt="Login" id="loginIcon" class="login-icon">
+    </div> -->
+    <div class="login-icons">
+      <img src="login/wechat.png" alt="WeChat Login" id="wechatLoginIcon" class="login-icon">
+      <img src="login/email.png" alt="Email Login" id="emailLoginIcon" class="login-icon">
+    </div>
+    
+    <div id="result" style="margin-top: 20px; color: green;"></div>
+  </div>
+  <script src="booking.js"></script>
+  <script src="login/login.js"></script>
+
+
+  <script>
+    // JavaScript to handle form submission
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the form from refreshing the page
+
+      // Get form values
+      const startPlace = document.getElementById('startPlace').value;
+      const endPlace = document.getElementById('endPlace').value;
+      const contactInfo = document.getElementById('contactInfo').value;
+      const carSelect = document.getElementById('carSelect').value;
+
+      // Send the data to the server using fetch (AJAX)
+      fetch('/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ startPlace, endPlace, contactInfo, carSelect })
+      })
+      .then(response => response.text())
+      .then(data => {
+        // Display the response below the form
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+          <h3>Booking Confirmed!</h3>
+          <p><strong>Start Place:</strong> ${startPlace}</p>
+          <p><strong>End Place:</strong> ${endPlace}</p>
+          <p><strong>Contact Info:</strong> ${contactInfo}</p>
+          <p><strong>Car Selected:</strong> ${carSelect}</p>
+        `;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the booking.');
+      });
+    });
+  </script>
+</body>
+</html>
