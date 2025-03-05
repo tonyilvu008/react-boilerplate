@@ -58,19 +58,29 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+  <div class="language-switcher">
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="ja">日本語 (Japanese)</option>
+      <option value="zh">中文 (Chinese)</option>
+      <option value="th">ไทย (Thai)</option>
+      <option value="vi">Tiếng Việt (Vietnamese)</option>
+    </select>
+  </div>
+
   <div class="container">
-    <h1>Car Booking</h1>
+    <h1 id="title">Car Booking</h1>
     <form id="bookingForm">
-      <label for="startPlace">Start Place:</label>
+      <label for="startPlace" id="startPlaceLabel">Start Place:</label>
       <input type="text" id="startPlace" name="startPlace" placeholder="Enter start place" required>
 
-      <label for="endPlace">End Place:</label>
+      <label for="endPlace" id="endPlaceLabel">End Place:</label>
       <input type="text" id="endPlace" name="endPlace" placeholder="Enter end place" required>
 
-      <label for="contactInfo">Contact Information:</label>
+      <label for="contactInfo" id="contactInfoLabel">Contact Information:</label>
       <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., email or phone)" required>
 
-      <label for="carSelect">Select a Car:</label>
+      <label for="carSelect" id="carSelectLabel">Select a Car:</label>
       <select id="carSelect" name="carSelect" required>
         <option value="">-- Select a Car --</option>
         <option value="Sedan">Sedan</option>
@@ -79,7 +89,7 @@
         <option value="Luxury">Luxury</option>
       </select>
 
-      <button type="submit">Book Now</button>
+      <button type="submit" id="bookNowButton">Book Now</button>
     </form>
     <!-- Login Icon -->
     <!-- <div class="login-container">
@@ -94,9 +104,10 @@
   </div>
   <script src="booking.js"></script>
   <script src="login/login.js"></script>
+  <script src="translations.js"></script>
 
 
-  <script>
+  <!-- <script>
     // JavaScript to handle form submission
     document.getElementById('bookingForm').addEventListener('submit', function(event) {
       event.preventDefault(); // Prevent the form from refreshing the page
@@ -131,6 +142,6 @@
         alert('An error occurred while submitting the booking.');
       });
     });
-  </script>
+  </script> -->
 </body>
 </html>
