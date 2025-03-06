@@ -54,10 +54,72 @@
       border: 1px solid #b2d8b2;
       border-radius: 4px;
     }
+    .hidden {
+      display: none;
+    }
+
+    /* Process Flow Bar Styles */
+    .process-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .process-step {
+      position: relative;
+      font-size: 14px;
+      color: #666;
+      font-weight: normal;
+      text-align: center;
+      flex: 1;
+      z-index: 1; /* Ensure the text is above the line */
+      background-color: #fff; /* Add background to avoid overlap with the line */
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+    .process-step.active {
+      color:black;
+      font-weight: bold;
+    }
+    .process-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -65%; /* Adjust the width of the line */
+      width: 80%; /* Line width between steps */
+      height: 5px; /* Thickness of the line */
+      background-color: #ccc; /* Grey color for the line */
+      transform: translateY(-50%);
+      z-index: 10; /* Place the line behind the steps */
+    }
+    .process-step.active:not(:last-child)::after {
+      background-color: black; /* Highlighted line for active steps */
+    }
+
+    /* Login Icons Styles */
+    .login-icons {
+      position: absolute;
+      top: 10px; /* Position from the top */
+      right: 20px; /* Position from the right */
+      display: flex;
+      gap: 10px; /* Space between icons */
+    }
+
+    .login-icon {
+      width: 24px; /* Smaller size for the icons */
+      height: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .login-icon:hover {
+      transform: scale(1.2); /* Slight zoom effect on hover */
+    }
   </style>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+  <!-- Language Switcher -->
   <div class="language-switcher">
     <select id="languageSelect">
       <option value="en">English</option>
@@ -68,18 +130,57 @@
     </select>
   </div>
 
+  <!-- Login Icons in the Upper Right Corner -->
+  <div class="login-icons">
+    <img src="login/wechat.png" alt="WeChat Login" id="wechatLoginIcon" class="login-icon">
+    <img src="login/email.png" alt="Email Login" id="emailLoginIcon" class="login-icon">
+  </div>
+
   <div class="container">
+    <!-- Process Flow Bar -->
+    <div class="process-flow">
+      <span class="process-step active" id="step1">Fill the form</span>
+      <span class="process-step" id="step2">Confirm the order</span>
+      <span class="process-step" id="step3">Choose the payment</span>
+      <span class="process-step" id="step4">Complete</span>
+    </div>
+
     <h1 id="title">Car Booking</h1>
     <form id="bookingForm">
+      <!-- Pickup Date and Time -->
+      <label for="pickupDateTime">Pickup Date and Time:</label>
+      <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
+
+      <!-- Start Place -->
       <label for="startPlace" id="startPlaceLabel">Start Place:</label>
-      <input type="text" id="startPlace" name="startPlace" placeholder="Enter start place" required>
+      <select id="startPlace" name="startPlace" required>
+        <option value="">-- Select Start Place --</option>
+        <option value="Narita Airport">Narita Airport</option>
+        <option value="Haneda Airport">Haneda Airport</option>
+        <option value="Ibaraki Airport">Ibaraki Airport</option>
+        <option value="Other">Other</option>
+      </select>
+      <!-- Custom Start Place (hidden by default) -->
+      <input type="text" id="customStartPlace" name="customStartPlace" placeholder="Enter custom start place" class="hidden">
 
+      <!-- End Place -->
       <label for="endPlace" id="endPlaceLabel">End Place:</label>
-      <input type="text" id="endPlace" name="endPlace" placeholder="Enter end place" required>
+      <select id="endPlace" name="endPlace" required>
+        <option value="">-- Select End Place --</option>
+        <option value="Tokyo City 23 districts">Tokyo City 23 districts</option>
+        <option value="Fuji Mountain">Fuji Mountain</option>
+        <option value="Hakone">Hakone</option>
+        <option value="Kamakura">Kamakura</option>
+        <option value="Disney">Disney</option>
+        <option value="Karuizawa">Karuizawa</option>
+        <option value="Niko">Niko</option>
+      </select>
 
+      <!-- Contact Information -->
       <label for="contactInfo" id="contactInfoLabel">Contact Information:</label>
       <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., email or phone)" required>
 
+      <!-- Select a Car -->
       <label for="carSelect" id="carSelectLabel">Select a Car:</label>
       <select id="carSelect" name="carSelect" required>
         <option value="">-- Select a Car --</option>
@@ -91,57 +192,42 @@
 
       <button type="submit" id="bookNowButton">Book Now</button>
     </form>
-    <!-- Login Icon -->
-    <!-- <div class="login-container">
-      <img src="login/wechat.png" alt="Login" id="loginIcon" class="login-icon">
-    </div> -->
-    <div class="login-icons">
-      <img src="login/wechat.png" alt="WeChat Login" id="wechatLoginIcon" class="login-icon">
-      <img src="login/email.png" alt="Email Login" id="emailLoginIcon" class="login-icon">
-    </div>
     
     <div id="result" style="margin-top: 20px; color: green;"></div>
   </div>
+  <script>
+    // Show custom start place input when "Other" is selected
+    document.getElementById('startPlace').addEventListener('change', function () {
+      const customStartPlace = document.getElementById('customStartPlace');
+      if (this.value === 'Other') {
+        customStartPlace.classList.remove('hidden');
+        customStartPlace.setAttribute('required', 'required');
+      } else {
+        customStartPlace.classList.add('hidden');
+        customStartPlace.removeAttribute('required');
+      }
+    });
+
+    // Function to update the process flow bar
+    function updateProcessFlow(step) {
+      const steps = document.querySelectorAll('.process-step');
+      steps.forEach((stepElement, index) => {
+        if (index + 1 === step) {
+          stepElement.classList.add('active');
+        } else {
+          stepElement.classList.remove('active');
+        }
+      });
+    }
+
+    // Example: Update the process flow dynamically
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      updateProcessFlow(2); // Move to "Confirm the order" step
+    });
+  </script>
   <script src="booking.js"></script>
   <script src="login/login.js"></script>
   <script src="translations.js"></script>
-
-
-  <!-- <script>
-    // JavaScript to handle form submission
-    document.getElementById('bookingForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent the form from refreshing the page
-
-      // Get form values
-      const startPlace = document.getElementById('startPlace').value;
-      const endPlace = document.getElementById('endPlace').value;
-      const contactInfo = document.getElementById('contactInfo').value;
-      const carSelect = document.getElementById('carSelect').value;
-
-      // Send the data to the server using fetch (AJAX)
-      fetch('/book', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ startPlace, endPlace, contactInfo, carSelect })
-      })
-      .then(response => response.text())
-      .then(data => {
-        // Display the response below the form
-        const resultDiv = document.getElementById('result');
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = `
-          <h3>Booking Confirmed!</h3>
-          <p><strong>Start Place:</strong> ${startPlace}</p>
-          <p><strong>End Place:</strong> ${endPlace}</p>
-          <p><strong>Contact Info:</strong> ${contactInfo}</p>
-          <p><strong>Car Selected:</strong> ${carSelect}</p>
-        `;
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while submitting the booking.');
-      });
-    });
-  </script> -->
 </body>
 </html>

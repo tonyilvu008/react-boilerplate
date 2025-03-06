@@ -1,21 +1,24 @@
-// Handle login icon click
-document.getElementById('loginIcon').addEventListener('click', function() {
-    // Redirect to the login page
-    window.location.href = 'login/login.html';
-  });
-  
- // Handle WeChat login icon click
-document.getElementById('wechatLoginIcon').addEventListener('click', function() {
-  alert('Redirecting to WeChat login...');
-  // Redirect to WeChat login page or show a modal
-  window.location.href = 'https://open.weixin.qq.com/connect/qrconnect'; // Example WeChat login URL
-});
+// Wait for the DOM to fully load
+document.addEventListener('DOMContentLoaded', function () {
+  // Handle WeChat login icon click
+  const wechatLoginIcon = document.getElementById('wechatLoginIcon');
+  if (wechatLoginIcon) {
+    wechatLoginIcon.addEventListener('click', function () {
+      // Redirect to the WeChat login page
+      window.location.href = 'login/wechat-login.html'; // Replace with your actual WeChat login page URL
+    });
+  } else {
+    console.error('WeChat login icon not found in the DOM.');
+  }
 
-// Handle Email login icon click
-document.getElementById('emailLoginIcon').addEventListener('click', function() {
-  alert('Redirecting to Email login...');
-  // Redirect to Email login page or show a modal
-  window.location.href = 'login/login.html'; // Example Email login page
+  // Handle Email login icon click
+  const emailLoginIcon = document.getElementById('emailLoginIcon');
+  if (emailLoginIcon) {
+    emailLoginIcon.addEventListener('click', function () {
+      // Redirect to the Email login page
+      window.location.href = 'login/email-login.html'; // Replace with your actual Email login page URL
+    });
+  } else {
+    console.error('Email login icon not found in the DOM.');
+  }
 });
-
-  
