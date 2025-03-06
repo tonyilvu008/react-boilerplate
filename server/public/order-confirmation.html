@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input, select, button {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ffe9;
+      border: 1px solid #b2d8b2;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Order Confirmation</h1>
+    <form id="confirmationForm">
+      <!-- Booking Details -->
+      <label for="pickupDateTime">Pickup Date and Time:</label>
+      <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
+
+      <label for="startPlace">Start Place:</label>
+      <input type="text" id="startPlace" name="startPlace" required>
+
+      <label for="endPlace">End Place:</label>
+      <input type="text" id="endPlace" name="endPlace" required>
+
+      <label for="contactInfo">Contact Information:</label>
+      <input type="text" id="contactInfo" name="contactInfo" required>
+
+      <label for="carSelect">Car Selected:</label>
+      <input type="text" id="carSelect" name="carSelect" required>
+
+      <!-- Buttons -->
+      <button type="button" id="modifyOrderButton">Modify Order</button>
+      <button type="submit" id="confirmOrderButton">Confirm Order</button>
+    </form>
+  </div>
+
+  <script>
+    // Load booking data from localStorage
+    const bookingData = JSON.parse(localStorage.getItem('bookingData'));
+    if (bookingData) {
+      document.getElementById('pickupDateTime').value = bookingData.pickupDateTime;
+      document.getElementById('startPlace').value = bookingData.startPlace;
+      document.getElementById('endPlace').value = bookingData.endPlace;
+      document.getElementById('contactInfo').value = bookingData.contactInfo;
+      document.getElementById('carSelect').value = bookingData.carSelect;
+    } else {
+      alert('No booking data found. Redirecting to the booking page.');
+      window.location.href = 'index.html';
+    }
+
+    // Handle form submission (Confirm Order)
+    document.getElementById('confirmationForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      alert('Order confirmed! Thank you for your booking.');
+      localStorage.removeItem('bookingData'); // Clear booking data after confirmation
+      window.location.href = 'index.html'; // Redirect to the home page
+    });
+
+    // Handle Modify Order button
+    document.getElementById('modifyOrderButton').addEventListener('click', function () {
+      alert('You can modify your order details.');
+    });
+  </script>
+</body>
+</html>
