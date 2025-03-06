@@ -62,39 +62,18 @@
     .process-flow {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       margin-bottom: 20px;
-      position: relative;
+      padding: 10px 0;
+      border-bottom: 2px solid #ccc;
     }
     .process-step {
-      position: relative;
       font-size: 14px;
       color: #666;
       font-weight: normal;
-      text-align: center;
-      flex: 1;
-      z-index: 1; /* Ensure the text is above the line */
-      background-color: #fff; /* Add background to avoid overlap with the line */
-      padding: 5px 10px;
-      border-radius: 6px;
     }
     .process-step.active {
-      color:black;
+      color: black;
       font-weight: bold;
-    }
-    .process-step:not(:last-child)::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: -65%; /* Adjust the width of the line */
-      width: 80%; /* Line width between steps */
-      height: 5px; /* Thickness of the line */
-      background-color: #ccc; /* Grey color for the line */
-      transform: translateY(-50%);
-      z-index: 10; /* Place the line behind the steps */
-    }
-    .process-step.active:not(:last-child)::after {
-      background-color: black; /* Highlighted line for active steps */
     }
 
     /* Login Icons Styles */
