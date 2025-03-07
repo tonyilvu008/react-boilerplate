@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update the process flow bar to highlight "Confirm the order"
     updateProcessFlow(2);
 
+    // Update the URL to reflect the admin page
+    history.pushState({ page: 'admin', bookingDetails }, 'Admin Page', '/admin');
+
     // Hide the "Car Booking" title
     const title = document.getElementById('title');
     if (title) {
@@ -71,9 +74,17 @@ document.addEventListener('DOMContentLoaded', function () {
         <p><strong>Contact Info:</strong> ${bookingDetails.contactInfo}</p>
         <p><strong>Car Selected:</strong> ${bookingDetails.carSelect}</p>
       </div>
-      
+      <button id="backButton">Back</button>
       <button id="proceedToPaymentButton">Proceed with Payment</button>
     `;
+
+    // Add event listener for the "Back" button
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+      backButton.addEventListener('click', function () {
+        history.back(); // Go back to the previous page
+      });
+    }
 
     // Add event listener for the "Proceed with Payment" button
     const proceedToPaymentButton = document.getElementById('proceedToPaymentButton');
@@ -89,13 +100,25 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update the process flow bar to highlight "Choose the payment"
     updateProcessFlow(3);
 
+    // Update the URL to reflect the payment page
+    history.pushState({ page: 'payment' }, 'Payment Page', '/payment');
+
     // Replace the form content with the payment page content
     const form = document.getElementById('bookingForm');
     form.innerHTML = `
       <h1>Payment Page</h1>
       <p>Choose your payment method:</p>
+      <button id="backButton">Back</button>
       <button id="completePaymentButton">Complete Payment</button>
     `;
+
+    // Add event listener for the "Back" button
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+      backButton.addEventListener('click', function () {
+        history.back(); // Go back to the previous page
+      });
+    }
 
     // Add event listener for the "Complete Payment" button
     const completePaymentButton = document.getElementById('completePaymentButton');
@@ -111,11 +134,42 @@ document.addEventListener('DOMContentLoaded', function () {
     // Update the process flow bar to highlight "Complete"
     updateProcessFlow(4);
 
+    // Update the URL to reflect the completion page
+    history.pushState({ page: 'complete' }, 'Payment Complete', '/complete');
+
     // Replace the form content with the completion message
     const form = document.getElementById('bookingForm');
     form.innerHTML = `
       <h1>Payment Complete</h1>
       <p>Thank you for your booking! Your payment has been successfully processed.</p>
+      <button id="backButton">Back</button>
     `;
+
+    // Add event listener for the "Back" button
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+      backButton.addEventListener('click', function () {
+        history.back(); // Go back to the previous page
+      });
+    }
   }
+
+  // Handle back and forward navigation
+  window.addEventListener('popstate', function (event) {
+    if (event.state) {
+      const page = event.state.page;
+      const bookingDetails = event.state.bookingDetails;
+
+      if (page === 'admin') {
+        transitionToAdminPage(bookingDetails);
+      } else if (page === 'payment') {
+        transitionToPaymentPage();
+      } else if (page === 'complete') {
+        completePayment();
+      } else {
+        // Default to the booking form
+        window.location.reload();
+      }
+    }
+  });
 });
