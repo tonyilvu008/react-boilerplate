@@ -15,10 +15,18 @@ let bookings = [];
 
 // Endpoint to handle form submissions
 app.post('/book', (req, res) => {
-  const { startPlace, endPlace, contactInfo, carSelect } = req.body;
+  const { pickupDateTime, startPlace, endPlace, contactInfo, carSelect } = req.body;
 
   // Save the booking to the in-memory array
-  const booking = { startPlace, endPlace, contactInfo, carSelect, time: new Date().toLocaleString() };
+  const booking = {
+    id: bookings.length + 1, // Generate a unique ID for the booking
+    pickupDateTime,
+    startPlace,
+    endPlace,
+    contactInfo,
+    carSelect,
+    time: new Date().toLocaleString(),
+  };
   bookings.push(booking);
 
   console.log('New Booking:', booking);
@@ -26,12 +34,18 @@ app.post('/book', (req, res) => {
   // Send a response back to the user
   res.send(`
     <h1>Booking Confirmed!</h1>
-    <p><strong>Start Place:</strong> \${startPlace}</p>
-    <p><strong>End Place:</strong> \${endPlace}</p>
-    <p><strong>Contact Info:</strong> \${contactInfo}</p>
-    <p><strong>Car Selected:</strong> \${carSelect}</p>
+    <p><strong>Pickup Date and Time:</strong> ${pickupDateTime}</p>
+    <p><strong>Start Place:</strong> ${startPlace}</p>
+    <p><strong>End Place:</strong> ${endPlace}</p>
+    <p><strong>Contact Info:</strong> ${contactInfo}</p>
+    <p><strong>Car Selected:</strong> ${carSelect}</p>
     <a href="/">Go Back</a>
   `);
+});
+
+// API endpoint to fetch all bookings
+app.get('/api/bookings', (req, res) => {
+  res.json(bookings); // Return the bookings array as JSON
 });
 
 // Admin page to view all bookings
@@ -42,6 +56,7 @@ app.get('/admin', (req, res) => {
       <thead>
         <tr>
           <th>#</th>
+          <th>Pickup Date and Time</th>
           <th>Start Place</th>
           <th>End Place</th>
           <th>Contact Info</th>
@@ -57,6 +72,7 @@ app.get('/admin', (req, res) => {
     html += `
       <tr>
         <td>${index + 1}</td>
+        <td>${booking.pickupDateTime}</td>
         <td>${booking.startPlace}</td>
         <td>${booking.endPlace}</td>
         <td>${booking.contactInfo}</td>

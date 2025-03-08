@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Booking</title>
   <style>
+    
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -33,19 +34,23 @@
     }
     input, select, button {
       padding: 10px;
+      font-family: 'Poppins', sans-serif;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      font-size: 16px;
+      font-size: 1rem;
     }
     button {
       background-color: #007bff;
       color: white;
       border: none;
       cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
     button:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
     }
     .result {
       margin-top: 20px;
@@ -67,7 +72,7 @@
       border-bottom: 2px solid #ccc;
     }
     .process-step {
-      font-size: 14px;
+      font-size: 0.9rem;
       color: #666;
       font-weight: normal;
     }
@@ -126,9 +131,13 @@
 
     <h1 id="title">Car Booking</h1>
     <form id="bookingForm">
-      <!-- Pickup Date and Time -->
-      <label for="pickupDateTime">Pickup Date and Time:</label>
-      <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
+  <!-- Pickup Date and Time -->
+<label for="pickupDateTime">Pickup Date and Time:</label>
+<div style="display: flex; align-items: center; gap: 10px;">
+  <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
+  <button type="button" id="confirmDateTimeButton">Confirm</button>
+</div>
+<p id="selectedDateTime" style="margin-top: 10px; color: green; font-weight: bold;"></p>
 
       <!-- Start Place -->
       <label for="startPlace" id="startPlaceLabel">Start Place:</label>
@@ -157,7 +166,7 @@
 
       <!-- Contact Information -->
       <label for="contactInfo" id="contactInfoLabel">Contact Information:</label>
-      <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., email or phone)" required>
+      <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., facebook, whatsApp, email or phone)" required>
 
       <!-- Select a Car -->
       <label for="carSelect" id="carSelectLabel">Select a Car:</label>
@@ -202,6 +211,21 @@
     // Example: Update the process flow dynamically
     document.getElementById('bookingForm').addEventListener('submit', function (event) {
       event.preventDefault();
+      // Get form values
+      const startPlace = document.getElementById('startPlace').value;
+      const endPlace = document.getElementById('endPlace').value;
+      const contactInfo = document.getElementById('contactInfo').value;
+      const carSelect = document.getElementById('carSelect').value;
+
+      // Display the booking details
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = `
+        <h3>Booking Confirmed!</h3>
+        <p><strong>Start Place:</strong> ${startPlace}</p>
+        <p><strong>End Place:</strong> ${endPlace}</p>
+        <p><strong>Contact Info:</strong> ${contactInfo}</p>
+        <p><strong>Car Selected:</strong> ${carSelect}</p>
+      `;
       updateProcessFlow(2); // Move to "Confirm the order" step
     });
   </script>
