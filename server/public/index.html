@@ -210,17 +210,45 @@
 
     // Example: Update the process flow dynamically
     document.getElementById('bookingForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+      // event.preventDefault();
       // Get form values
+      const pickupDateTime = document.getElementById('pickupDateTime').value;
       const startPlace = document.getElementById('startPlace').value;
       const endPlace = document.getElementById('endPlace').value;
       const contactInfo = document.getElementById('contactInfo').value;
       const carSelect = document.getElementById('carSelect').value;
+      console.log('pickupDateTime:', pickupDateTime); // Debugging log
+      console.log('Form values:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect });
 
-      // Display the booking details 22
+// Send the data to the backend using fetch
+fetch('/book', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      startPlace,
+      endPlace,
+      contactInfo,
+      carSelect,
+      pickupDateTime: new Date().toISOString(), // Add a default pickupDateTime
+    }),
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      // Display the response from the server
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = data;
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('An error occurred while submitting the form. Please try again.');
+    });
+      // Display the booking details
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = `
         <h3>Booking Confirmed!</h3>
+        <p><strong>Pickup Date and Time:</strong> ${pickupDateTime}</p>
         <p><strong>Start Place:</strong> ${startPlace}</p>
         <p><strong>End Place:</strong> ${endPlace}</p>
         <p><strong>Contact Info:</strong> ${contactInfo}</p>

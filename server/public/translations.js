@@ -17,6 +17,10 @@ const translations = {
     completePaymentButton: "Complete Payment",
     paymentCompleteTitle: "Payment Complete",
     paymentCompleteMessage: "Thank you for your booking! Your payment has been successfully processed.",
+    step1: "Fill the form",
+    step2: "Confirm the order",
+    step3: "Choose the payment",
+    step4: "Complete",
   },
   ja: {
     title: "車の予約",
@@ -35,6 +39,10 @@ const translations = {
     completePaymentButton: "支払いを完了する",
     paymentCompleteTitle: "支払い完了",
     paymentCompleteMessage: "ご予約ありがとうございます！お支払いが正常に処理されました。",
+    step1: "フォームに記入",
+    step2: "注文を確認",
+    step3: "支払いを選択",
+    step4: "完了",
   },
   zh: {
     title: "汽车预订",
@@ -109,7 +117,33 @@ function updateLanguage(language) {
     translations[language].carSelectLabel;
   document.getElementById("bookNowButton").textContent =
     translations[language].bookNowButton;
+    const langData = translations[language] || translations["en"]; // Fallback to English
+  document.getElementById("title").textContent = langData.title || translations["en"].title;
+  document.getElementById("pickupDateTimeLabel").textContent =
+    langData.pickupDateTimeLabel || translations["en"].pickupDateTimeLabel;
+  document.getElementById("startPlaceLabel").textContent =
+    langData.startPlaceLabel || translations["en"].startPlaceLabel;
+  document.getElementById("customStartPlace").placeholder =
+    langData.customStartPlacePlaceholder || translations["en"].customStartPlacePlaceholder;
+  document.getElementById("endPlaceLabel").textContent =
+    langData.endPlaceLabel || translations["en"].endPlaceLabel;
+  document.getElementById("contactInfoLabel").textContent =
+    langData.contactInfoLabel || translations["en"].contactInfoLabel;
+  document.getElementById("carSelectLabel").textContent =
+    langData.carSelectLabel || translations["en"].carSelectLabel;
+  document.getElementById("bookNowButton").textContent =
+    langData.bookNowButton || translations["en"].bookNowButton;
+  // Update process flow steps
+  document.getElementById("step1").textContent = langData.step1 || translations["en"].step1;
+  document.getElementById("step2").textContent = langData.step2 || translations["en"].step2;
+  document.getElementById("step3").textContent = langData.step3 || translations["en"].step3;
+  document.getElementById("step4").textContent = langData.step4 || translations["en"].step4;
+
 }
+document.getElementById("step1").textContent = translations[language].step1;
+document.getElementById("step2").textContent = translations[language].step2;
+document.getElementById("step3").textContent = translations[language].step3;
+document.getElementById("step4").textContent = translations[language].step4;
 
 // Event listener for the language switcher
 document.getElementById("languageSelect").addEventListener("change", function () {
@@ -118,4 +152,5 @@ document.getElementById("languageSelect").addEventListener("change", function ()
 });
 
 // Set default language to English
-updateLanguage("en");
+document.getElementById("languageSelect").value = "en";
+
