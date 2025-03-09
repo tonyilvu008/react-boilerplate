@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const bookingForm = document.getElementById('bookingForm');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (event) {
-      event.preventDefault(); // Prevent the form from refreshing the page
+      // event.preventDefault(); // Prevent the form from refreshing the page
 
       // Get form values
       const pickupDateTime = document.getElementById('pickupDateTime').value;
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Replace the form content with the admin page content
     const form = document.getElementById('bookingForm');
     form.innerHTML = `
-      <h1>Admin Page</h1>
+      <h1>Order information</h1>
       <p>Confirm the order details below:</p>
       <div id="orderDetails">
         <p><strong>Pickup Date and Time:</strong> ${bookingDetails.pickupDateTime}</p>
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <p><strong>Contact Info:</strong> ${bookingDetails.contactInfo}</p>
         <p><strong>Car Selected:</strong> ${bookingDetails.carSelect}</p>
       </div>
-      <button id="backButton">Back</button>
+      <a href="/">Go Back</a>
       <button id="proceedToPaymentButton">Proceed with Payment</button>
     `;
 
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.innerHTML = `
       <h1>Payment Page</h1>
       <p>Choose your payment method:</p>
-      <button id="backButton">Back</button>
+      <a href="/">Go Back</a>
       <button id="completePaymentButton">Complete Payment</button>
     `;
 
