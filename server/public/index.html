@@ -169,20 +169,54 @@
       <input type="text" id="contactInfo" name="contactInfo" placeholder="Enter your contact info (e.g., facebook, whatsApp, email or phone)" required>
 
       <!-- Select a Car -->
+     <!-- Select a Car -->
       <label for="carSelect" id="carSelectLabel">Select a Car:</label>
-      <select id="carSelect" name="carSelect" required>
-        <option value="">-- Select a Car --</option>
-        <option value="Sedan">Sedan</option>
-        <option value="SUV">SUV</option>
-        <option value="Hatchback">Hatchback</option>
-        <option value="Luxury">Luxury</option>
-      </select>
+        <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="text" id="carSelect" name="carSelect" placeholder="Click to select a car" readonly required>
+        <button type="button" onclick="navigateToCarSelection()">Choose Car</button>
+        </div>
+
 
       <button type="submit" id="bookNowButton">Book Now</button>
     </form>
     
     <div id="result" style="margin-top: 20px; color: green;"></div>
   </div>
+  <script>
+    // Function to navigate to the car selection page
+    function navigateToCarSelection() {
+      // Save current form data to localStorage
+     const formData = {
+    pickupDateTime: document.getElementById('pickupDateTime').value,
+    startPlace: document.getElementById('startPlace').value,
+    customStartPlace: document.getElementById('customStartPlace').value,
+    endPlace: document.getElementById('endPlace').value,
+    contactInfo: document.getElementById('contactInfo').value,
+  };
+  localStorage.setItem('formData', JSON.stringify(formData));
+      window.location.href = 'car-selection.html';
+    }
+  
+    // Check if a car was selected on the car selection page
+    document.addEventListener('DOMContentLoaded', function () {
+      // Restore form data from localStorage
+  const savedFormData = localStorage.getItem('formData');
+      if (savedFormData) {
+        const formData = JSON.parse(savedFormData);
+        document.getElementById('pickupDateTime').value = formData.pickupDateTime || '';
+        document.getElementById('startPlace').value = formData.startPlace || '';
+        document.getElementById('customStartPlace').value = formData.customStartPlace || '';
+        document.getElementById('endPlace').value = formData.endPlace || '';
+        document.getElementById('contactInfo').value = formData.contactInfo || '';
+      }
+      const selectedCar = localStorage.getItem('selectedCar');
+      if (selectedCar) {
+        document.getElementById('carSelect').value = selectedCar;
+        localStorage.removeItem('selectedCar'); // Clear the selection after use
+      }
+    });
+  </script>
+  
   <script>
     // Show custom start place input when "Other" is selected
     document.getElementById('startPlace').addEventListener('change', function () {
@@ -211,6 +245,8 @@
     // Example: Update the process flow dynamically
     document.getElementById('bookingForm').addEventListener('submit', function (event) {
       // event.preventDefault();
+       // Clear saved form data from localStorage
+       localStorage.removeItem('formData');
       // Get form values
       const pickupDateTime = document.getElementById('pickupDateTime').value;
       const startPlace = document.getElementById('startPlace').value;
