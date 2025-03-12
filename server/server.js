@@ -11,6 +11,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files (e.g., index.html)
 app.use(express.static('public'));
 
+app.use((req, res, next) => {
+  console.log(`Request URL: ${req.url}`);
+  next();
+});
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 // Create a connection pool to the MySQL database
 const db = mysql.createPool({
   host: 'localhost', // Replace with your MySQL host

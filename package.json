@@ -2,7 +2,7 @@
   "name": "react-boilerplate",
   "version": "1.0.0",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/server.js",
     "test": "jest",
     "lint": "eslint .",
     "lint:staged": "lint-staged"
@@ -15,8 +15,7 @@
       "git add"
     ],
     "*.json": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "main": ".eslintrc.js",
