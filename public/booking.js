@@ -65,18 +65,54 @@ document.addEventListener('DOMContentLoaded', function () {
     // Replace the form content with the admin page content
     const form = document.getElementById('bookingForm');
     form.innerHTML = `
-      <h1>Admin Page</h1>
-      <p>Confirm the order details below:</p>
-      <div id="orderDetails">
-        <p><strong>Pickup Date and Time:</strong> ${bookingDetails.pickupDateTime}</p>
-        <p><strong>Start Place:</strong> ${bookingDetails.startPlace}</p>
-        <p><strong>End Place:</strong> ${bookingDetails.endPlace}</p>
-        <p><strong>Contact Info:</strong> ${bookingDetails.contactInfo}</p>
-        <p><strong>Car Selected:</strong> ${bookingDetails.carSelect}</p>
+    <h1>Admin Page</h1>
+    <p>Confirm and edit your order details below:</p>
+    <div id="orderDetails">
+      <div>
+        <label for="editPickupDateTime"><strong>Pickup Date and Time:</strong></label>
+        <input type="datetime-local" id="editPickupDateTime" value="${bookingDetails.pickupDateTime}">
       </div>
-      <button id="backButton">Back</button>
-      <button id="proceedToPaymentButton">Proceed with Payment</button>
-    `;
+      <div>
+        <label for="editStartPlace"><strong>Start Place:</strong></label>
+        <input type="text" id="editStartPlace" value="${bookingDetails.startPlace}">
+      </div>
+      <div>
+        <label for="editEndPlace"><strong>End Place:</strong></label>
+        <input type="text" id="editEndPlace" value="${bookingDetails.endPlace}">
+      </div>
+      <div>
+        <label for="editContactInfo"><strong>Contact Info:</strong></label>
+        <input type="text" id="editContactInfo" value="${bookingDetails.contactInfo}">
+      </div>
+      <div>
+        <label for="editCarSelect"><strong>Car Selected:</strong></label>
+        <input type="text" id="editCarSelect" value="${bookingDetails.carSelect}" readonly>
+        <button type="button" onclick="navigateToCarSelection()">Change Car</button>
+      </div>
+    </div>
+    <button id="saveChangesButton">Save Changes</button>
+    <button id="backButton">Back</button>
+    <button id="proceedToPaymentButton">Proceed with Payment</button>
+  `;
+  // Add event listener for the "Save Changes" button
+  const saveChangesButton = document.getElementById('saveChangesButton');
+  if (saveChangesButton) {
+    saveChangesButton.addEventListener('click', function () {
+      // Save the updated details
+      const updatedDetails = {
+        pickupDateTime: document.getElementById('editPickupDateTime').value,
+        startPlace: document.getElementById('editStartPlace').value,
+        endPlace: document.getElementById('editEndPlace').value,
+        contactInfo: document.getElementById('editContactInfo').value,
+        carSelect: document.getElementById('editCarSelect').value,
+      };
+
+      // Update the booking details in the state
+      history.replaceState({ page: 'admin', bookingDetails: updatedDetails }, 'Admin Page', '/admin');
+
+      alert('Changes saved successfully!');
+    });
+  }
 
     // Add event listener for the "Back" button
     const backButton = document.getElementById('backButton');
@@ -99,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function transitionToPaymentPage() {
     // Update the process flow bar to highlight "Choose the payment"
     updateProcessFlow(3);
-
     // Update the URL to reflect the payment page
     history.pushState({ page: 'payment' }, 'Payment Page', '/payment');
 
@@ -108,6 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.innerHTML = `
       <h1>Payment Page</h1>
       <p>Choose your payment method:</p>
+      <div id="paypal-button-container"></div>
       <button id="backButton">Back</button>
       <button id="completePaymentButton">Complete Payment</button>
     `;
@@ -118,6 +154,37 @@ document.addEventListener('DOMContentLoaded', function () {
       backButton.addEventListener('click', function () {
         history.back(); // Go back to the previous page
       });
+    }
+     // Render the PayPal button
+    renderPayPalButton();
+    function renderPayPalButton() {
+      paypal.Buttons({
+        createOrder: function (data, actions) {
+          // Set up the transaction
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: '100.00' // Replace with the actual amount
+              }
+            }]
+          });
+        },
+        onApprove: function (data, actions) {
+          // Capture the funds from the transaction
+          return actions.order.capture().then(function (details) {
+            // Show a success message to the buyer
+            alert('Transaction completed by ' + details.payer.name.given_name);
+    
+            // Transition to the payment completion page
+            completePayment();
+          });
+        },
+        onError: function (err) {
+          // Handle errors
+          console.error('PayPal error:', err);
+          alert('An error occurred during the payment process. Please try again.');
+        }
+      }).render('#paypal-button-container'); // Display the PayPal button in the container
     }
 
     // Add event listener for the "Complete Payment" button

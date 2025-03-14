@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Car Booking</title>
   <style>
-    
+     #paypal-button-container {
+    margin: 20px auto;
+    text-align: center;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -293,6 +301,8 @@ fetch('/book', {
       updateProcessFlow(2); // Move to "Confirm the order" step
     });
   </script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AfYVvizTDn98KE-gx2Ivb-YgBvD1PQ8iAgNP5DTsZGHyod3sfHxghBiJGhi4VyMARHz5LUyztuUQLSr3&currency=USD"></script>
+
   <script src="booking.js"></script>
   <script src="login/login.js"></script>
   <script src="translations.js"></script>
