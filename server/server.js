@@ -39,16 +39,19 @@ db.getConnection((err) => {
 // Endpoint to handle form submissions
 app.post('/book', (req, res) => {
   console.log(req.body); // Log the received data
-  const { pickupDateTime, startPlace, endPlace, contactInfo, carSelect } = req.body;
+  const { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber,
+    totalPrice } = req.body;
 
   // Insert the booking into the database
   const query = `
-    INSERT INTO orders (pickupDateTime, startPlace, endPlace, contactInfo, carSelect)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO orders (pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber,
+    totalPrice)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
   debugger; // Execution will pause here
   console.log("Already inserted!")
-  const values = [pickupDateTime, startPlace, endPlace, contactInfo, carSelect];
+  const values = [pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber,
+    totalPrice];
 
   db.query(query, values, (err, result) => {
     debugger; // Execution will pause here
@@ -66,6 +69,8 @@ app.post('/book', (req, res) => {
         <p><strong>End Place:</strong> ${endPlace}</p>
         <p><strong>Contact Info:</strong> ${contactInfo}</p>
         <p><strong>Car Selected:</strong> ${carSelect}</p>
+        <p><strong>Passenger Number:</strong> ${passengerNumber}</p>
+        <p><strong>TotalPrice:</strong> ${totalPrice}</p>
         <a href="/">Go Back</a>
       `);
     }

@@ -53,6 +53,8 @@
   <div class="container">
     <h1>Car Booking</h1>
     <form id="bookingForm">
+      <label for="pickupDateTime">Pickup Date and Time:</label>
+      <input type="datetime-local" id="pickupDateTime" name="pickupDateTime" required>
       <label for="startPlace">Start Place:</label>
       <input type="text" id="startPlace" name="startPlace" placeholder="Enter start place" required>
 
@@ -89,20 +91,12 @@
       event.preventDefault(); // Prevent the form from refreshing the page
 
       // Get form values
+      const pickupDateTime = document.getElementById('pickupDateTime').value;
       const startPlace = document.getElementById('startPlace').value;
       const endPlace = document.getElementById('endPlace').value;
       const contactInfo = document.getElementById('contactInfo').value;
       const carSelect = document.getElementById('carSelect').value;
 
-      // Display the booking details
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = `
-        <h3>Booking Confirmed!</h3>
-        <p><strong>Start Place:</strong> \${startPlace}</p>
-        <p><strong>End Place:</strong> \${endPlace}</p>
-        <p><strong>Contact Info:</strong> \${contactInfo}</p>
-        <p><strong>Car Selected:</strong> \${carSelect}</p>
-      `;
     });
   </script>
 </body>

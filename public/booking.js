@@ -13,12 +13,16 @@ document.addEventListener('DOMContentLoaded', function () {
       const endPlace = document.getElementById('endPlace').value;
       const contactInfo = document.getElementById('contactInfo').value;
       const carSelect = document.getElementById('carSelect').value;
+      const passengerNumber = parseInt(document.getElementById('passengerNumber').value); // Get passenger number
+      const pricePerPerson = 2500;
+      const totalPrice = passengerNumber * pricePerPerson;
+      console.log('Form values:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber }); // Debugging
 
       // Determine the actual start place
       const actualStartPlace = startPlace === 'Other' ? customStartPlace : startPlace;
 
       // Validate form inputs
-      if (!pickupDateTime || !actualStartPlace || !endPlace || !contactInfo || !carSelect) {
+      if (!pickupDateTime || !actualStartPlace || !endPlace || !contactInfo || !carSelect || !passengerNumber) {
         alert('Please fill out all fields before submitting.');
         return;
       }
@@ -30,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         endPlace,
         contactInfo,
         carSelect,
+        passengerNumber,
       });
     });
   } else {
@@ -88,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
         <label for="editCarSelect"><strong>Car Selected:</strong></label>
         <input type="text" id="editCarSelect" value="${bookingDetails.carSelect}" readonly>
         <button type="button" onclick="navigateToCarSelection()">Change Car</button>
+      </div>
+      <div>
+        <label for="passengerNumber" id="passengerNumberLabel">Number of Passengers:</label>
+        <input type="number" id="passengerNumber" name="passengerNumber" min="1" value="1" required>
       </div>
     </div>
     <button id="saveChangesButton">Save Changes</button>

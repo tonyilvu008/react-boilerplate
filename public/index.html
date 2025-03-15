@@ -14,17 +14,22 @@
     border-radius: 5px;
     background-color: #f9f9f9;
   }
-    body {
+      body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f4f4f9;
+      background-image: url('images/sakura-fujisan.jpg'); /* Add this line */
+      background-size: cover; /* Optional: Cover the entire background */
+      background-position: center top; /* Optional: Center the image at the top */
+      background-repeat: no-repeat; /* Prevent the image from repeating */
+      min-height: 100vh; /* Ensure the background covers the entire viewport height */
     }
     .container {
       max-width: 600px;
       margin: 50px auto;
       padding: 20px;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.8); /* Add transparency to the container */
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -108,6 +113,16 @@
     .login-icon:hover {
       transform: scale(1.2); /* Slight zoom effect on hover */
     }
+    /* Style for inline display of passenger number and price */
+    .passenger-price-container {
+      display: flex;
+      align-items: center; /* Vertically align items */
+      justify-content: space-between; /* Distribute space evenly */
+    }
+
+    .passenger-price-container label {
+      margin-right: 10px; /* Add some space between label and input */
+    }
   </style>
 </head>
 <body>
@@ -183,8 +198,12 @@
         <input type="text" id="carSelect" name="carSelect" placeholder="Click to select a car" readonly required>
         <button type="button" onclick="navigateToCarSelection()">Choose Car</button>
         </div>
-
-
+        <div class="passenger-price-container">
+          <label for="passengerNumber" id="passengerNumberLabel">Number of Passengers:</label>
+          <input type="number" id="passengerNumber" name="passengerNumber" min="1" value="1" required>
+          <div id="priceDisplay" style="font-weight: bold;"></div>
+      </div>
+      
       <button type="submit" id="bookNowButton">Book Now</button>
     </form>
     
@@ -261,7 +280,15 @@
       const endPlace = document.getElementById('endPlace').value;
       const contactInfo = document.getElementById('contactInfo').value;
       const carSelect = document.getElementById('carSelect').value;
-      console.log('pickupDateTime:', pickupDateTime); // Debugging log
+      const passengerNumber = parseInt(document.getElementById('passengerNumber').value, 10);
+
+      // Calculate the total price
+      let totalPrice = 0;
+      if (carSelect === 'Voxy 2025') {
+          totalPrice = passengerNumber * 2500;
+      }
+        console.log('pickupDateTime:', pickupDateTime); // Debugging log
+
       console.log('Form values:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect });
 
 // Send the data to the backend using fetch
@@ -276,6 +303,8 @@ fetch('/book', {
       contactInfo,
       carSelect,
       pickupDateTime: new Date().toISOString(), // Add a default pickupDateTime
+      passengerNumber: passengerNumber, // Send passenger number to the backend
+      totalPrice: totalPrice //send total price to the backend
     }),
   })
     .then((response) => response.text())
@@ -297,7 +326,9 @@ fetch('/book', {
         <p><strong>End Place:</strong> ${endPlace}</p>
         <p><strong>Contact Info:</strong> ${contactInfo}</p>
         <p><strong>Car Selected:</strong> ${carSelect}</p>
-      `;
+        <p><strong>Number of Passengers:</strong> ${passengerNumber}</p>
+        <p><strong>Total Price:</strong> ¥${totalPrice.toLocaleString()}</p>
+  `;
       updateProcessFlow(2); // Move to "Confirm the order" step
     });
   </script>
