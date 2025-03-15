@@ -40,7 +40,7 @@ db.getConnection((err) => {
 app.post('/book', (req, res) => {
   console.log(req.body); // Log the received data
   const { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber,
-    totalPrice } = req.body;
+    price } = req.body;
 
   // Insert the booking into the database
   const query = `
@@ -51,7 +51,7 @@ app.post('/book', (req, res) => {
   debugger; // Execution will pause here
   console.log("Already inserted!")
   const values = [pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber,
-    totalPrice];
+    price];
 
   db.query(query, values, (err, result) => {
     debugger; // Execution will pause here
@@ -70,7 +70,7 @@ app.post('/book', (req, res) => {
         <p><strong>Contact Info:</strong> ${contactInfo}</p>
         <p><strong>Car Selected:</strong> ${carSelect}</p>
         <p><strong>Passenger Number:</strong> ${passengerNumber}</p>
-        <p><strong>TotalPrice:</strong> ${totalPrice}</p>
+        <p><strong>TotalPrice:</strong> ${price}</p>
         <a href="/">Go Back</a>
       `);
     }
@@ -111,6 +111,8 @@ app.get('/admin', (req, res) => {
               <th>End Place</th>
               <th>Contact Info</th>
               <th>Car Selected</th>
+              <th>Passenger Number</th>
+              <th>Total Price</th>
               <th>Created At</th>
             </tr>
           </thead>
@@ -127,6 +129,8 @@ app.get('/admin', (req, res) => {
             <td>${booking.endPlace}</td>
             <td>${booking.contactInfo}</td>
             <td>${booking.carSelect}</td>
+            <td>${booking.passengerNumber}</td>
+            <td>${booking.totalPrice}</td>
             <td>${booking.created_at}</td>
           </tr>
         `;

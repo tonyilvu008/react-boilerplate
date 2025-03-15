@@ -14,15 +14,41 @@ document.addEventListener('DOMContentLoaded', function () {
       const contactInfo = document.getElementById('contactInfo').value;
       const carSelect = document.getElementById('carSelect').value;
       const passengerNumber = parseInt(document.getElementById('passengerNumber').value); // Get passenger number
-      const pricePerPerson = 2500;
-      const totalPrice = passengerNumber * pricePerPerson;
-      console.log('Form values:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber }); // Debugging
+      // Price calculation logic
+      let price = 0;
+      const carType = 'Luxury'; // Assuming this is fixed for now
 
-      // Determine the actual start place
-      const actualStartPlace = startPlace === 'Other' ? customStartPlace : startPlace;
+      // Define price matrix
+      const priceMatrix = {
+        'Narita Airport': {
+          'Tokyo 23 Districts': 15600,
+          'Fujisan/Hakone/Kamakura': 41000,
+        },
+        'Haneda Airport': {
+          'Tokyo 23 Districts': 11000,
+          'Fujisan/Hakone/Kamakura': 32000,
+        },
+        'Tokyo 23 Districts': {
+          'Fujisan/Hakone/Kamakura': 32000,
+          'Disney': 11000,
+          'Kamakura (10 hours)': 45000,
+          'Fujisan/Hakone (10 hours)': 51000,
+          'Karuizawa/Niko': 61000,
+        },
+      };
 
+      // Look up the price
+      if (priceMatrix[startPlace] && priceMatrix[startPlace][endPlace]) {
+        price = priceMatrix[startPlace][endPlace];
+      } else {
+        alert('Sorry, we do not have a price for that route.');
+        return; // Stop the submission
+      }
+
+      // Log the price
+      console.log('Calculated Price:', price);
       // Validate form inputs
-      if (!pickupDateTime || !actualStartPlace || !endPlace || !contactInfo || !carSelect || !passengerNumber) {
+      if (!pickupDateTime || !startPlace || !endPlace || !contactInfo || !carSelect || !passengerNumber) {
         alert('Please fill out all fields before submitting.');
         return;
       }
@@ -30,11 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
       // Transition to the admin page
       transitionToAdminPage({
         pickupDateTime,
-        startPlace: actualStartPlace,
+        startPlace: startPlace,
         endPlace,
         contactInfo,
         carSelect,
         passengerNumber,
+        price,
       });
     });
   } else {
@@ -95,8 +122,12 @@ document.addEventListener('DOMContentLoaded', function () {
         <button type="button" onclick="navigateToCarSelection()">Change Car</button>
       </div>
       <div>
-        <label for="passengerNumber" id="passengerNumberLabel">Number of Passengers:</label>
-        <input type="number" id="passengerNumber" name="passengerNumber" min="1" value="1" required>
+       <label for="passengerNumber" id="passengerNumberLabel">Number of Passengers:</label>
+          <input type="number" id="passengerNumber" name="passengerNumber" min="1" value="${bookingDetails.passengerNumber}" required>
+      </div>
+      <div>
+          <label for="price"><strong>Price:</strong></label>
+          <input type="text" id="price" value="${bookingDetails.price} Yen" readonly>
       </div>
     </div>
     <button id="saveChangesButton">Save Changes</button>
@@ -114,7 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
         endPlace: document.getElementById('editEndPlace').value,
         contactInfo: document.getElementById('editContactInfo').value,
         carSelect: document.getElementById('editCarSelect').value,
-      };
+        passengerNumber: document.getElementById('passengerNumber').value,
+        price: bookingDetails.price, // Keep the original price
+    };
 
       // Update the booking details in the state
       history.replaceState({ page: 'admin', bookingDetails: updatedDetails }, 'Admin Page', '/admin');
@@ -135,22 +168,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const proceedToPaymentButton = document.getElementById('proceedToPaymentButton');
     if (proceedToPaymentButton) {
       proceedToPaymentButton.addEventListener('click', function () {
-        transitionToPaymentPage();
+        transitionToPaymentPage(bookingDetails.price);
       });
     }
   }
 
   // Function to transition to the payment page
-  function transitionToPaymentPage() {
+  function transitionToPaymentPage(price) {
     // Update the process flow bar to highlight "Choose the payment"
     updateProcessFlow(3);
     // Update the URL to reflect the payment page
-    history.pushState({ page: 'payment' }, 'Payment Page', '/payment');
+    history.pushState({ page: 'payment', price: price }, 'Payment Page', '/payment');
 
     // Replace the form content with the payment page content
     const form = document.getElementById('bookingForm');
     form.innerHTML = `
       <h1>Payment Page</h1>
+      <p>Total amount: ${price} Yen</p>
       <p>Choose your payment method:</p>
       <div id="paypal-button-container"></div>
       <button id="backButton">Back</button>
@@ -165,8 +199,8 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
      // Render the PayPal button
-    renderPayPalButton();
-    function renderPayPalButton() {
+    renderPayPalButton(price);
+    function renderPayPalButton(price) {
       paypal.Buttons({
         createOrder: function (data, actions) {
           // Set up the transaction

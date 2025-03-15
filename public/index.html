@@ -168,7 +168,7 @@
         <option value="">-- Select Start Place --</option>
         <option value="Narita Airport">Narita Airport</option>
         <option value="Haneda Airport">Haneda Airport</option>
-        <option value="Ibaraki Airport">Ibaraki Airport</option>
+        <option value="Tokyo 23 Districts">Tokyo 23 Districts</option>
         <option value="Other">Other</option>
       </select>
       <!-- Custom Start Place (hidden by default) -->
@@ -178,13 +178,12 @@
       <label for="endPlace" id="endPlaceLabel">End Place:</label>
       <select id="endPlace" name="endPlace" required>
         <option value="">-- Select End Place --</option>
-        <option value="Tokyo City 23 districts">Tokyo City 23 districts</option>
-        <option value="Fuji Mountain">Fuji Mountain</option>
-        <option value="Hakone">Hakone</option>
-        <option value="Kamakura">Kamakura</option>
+        <option value="Tokyo 23 Districts">Tokyo 23 Districts</option>
+        <option value="Fujisan/Hakone/Kamakura">Fujisan/Hakone/Kamakura</option>
         <option value="Disney">Disney</option>
-        <option value="Karuizawa">Karuizawa</option>
-        <option value="Niko">Niko</option>
+        <option value="Kamakura (10 hours)">Kamakura (10 hours)</option>
+        <option value="Fujisan/Hakone (10 hours)">Fujisan/Hakone (10 hours)</option>
+        <option value="Karuizawa/Niko">Karuizawa/Niko</option>
       </select>
 
       <!-- Contact Information -->
@@ -204,6 +203,7 @@
           <div id="priceDisplay" style="font-weight: bold;"></div>
       </div>
       
+      
       <button type="submit" id="bookNowButton">Book Now</button>
     </form>
     
@@ -219,6 +219,8 @@
     customStartPlace: document.getElementById('customStartPlace').value,
     endPlace: document.getElementById('endPlace').value,
     contactInfo: document.getElementById('contactInfo').value,
+    passengerNumber: document.getElementById('passengerNumber').value,
+
   };
   localStorage.setItem('formData', JSON.stringify(formData));
       window.location.href = 'car-selection.html';
@@ -235,6 +237,7 @@
         document.getElementById('customStartPlace').value = formData.customStartPlace || '';
         document.getElementById('endPlace').value = formData.endPlace || '';
         document.getElementById('contactInfo').value = formData.contactInfo || '';
+        document.getElementById('passengerNumber').value = formData.passengerNumber || '';
       }
       const selectedCar = localStorage.getItem('selectedCar');
       if (selectedCar) {
@@ -283,13 +286,12 @@
       const passengerNumber = parseInt(document.getElementById('passengerNumber').value, 10);
 
       // Calculate the total price
-      let totalPrice = 0;
-      if (carSelect === 'Voxy 2025') {
-          totalPrice = passengerNumber * 2500;
-      }
-        console.log('pickupDateTime:', pickupDateTime); // Debugging log
+      let price = 0;
+      // if (carSelect === 'Voxy 2025') {
+      //     totalPrice = passengerNumber * 2500;
+      // }
 
-      console.log('Form values:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect });
+      console.log('Sending to server:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber, price,});
 
 // Send the data to the backend using fetch
 fetch('/book', {
@@ -304,7 +306,7 @@ fetch('/book', {
       carSelect,
       pickupDateTime: new Date().toISOString(), // Add a default pickupDateTime
       passengerNumber: passengerNumber, // Send passenger number to the backend
-      totalPrice: totalPrice //send total price to the backend
+      price: price //send total price to the backend
     }),
   })
     .then((response) => response.text())
@@ -327,7 +329,7 @@ fetch('/book', {
         <p><strong>Contact Info:</strong> ${contactInfo}</p>
         <p><strong>Car Selected:</strong> ${carSelect}</p>
         <p><strong>Number of Passengers:</strong> ${passengerNumber}</p>
-        <p><strong>Total Price:</strong> ¥${totalPrice.toLocaleString()}</p>
+        <p><strong>Total Price:</strong> ¥${price.toLocaleString()}</p>
   `;
       updateProcessFlow(2); // Move to "Confirm the order" step
     });
