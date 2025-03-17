@@ -4,54 +4,54 @@ document.addEventListener('DOMContentLoaded', function () {
   const bookingForm = document.getElementById('bookingForm');
   if (bookingForm) {
     bookingForm.addEventListener('submit', function (event) {
-      event.preventDefault(); // Prevent the form from refreshing the page
+      // event.preventDefault(); // Prevent the form from refreshing the page
 
-      // Get form values
-      const pickupDateTime = document.getElementById('pickupDateTime').value;
-      const startPlace = document.getElementById('startPlace').value;
-      const customStartPlace = document.getElementById('customStartPlace').value;
-      const endPlace = document.getElementById('endPlace').value;
-      const contactInfo = document.getElementById('contactInfo').value;
-      const carSelect = document.getElementById('carSelect').value;
-      const passengerNumber = parseInt(document.getElementById('passengerNumber').value); // Get passenger number
-      // Price calculation logic
-      let price = 0;
-      const carType = 'Luxury'; // Assuming this is fixed for now
+      // // Get form values
+      // const pickupDateTime = document.getElementById('pickupDateTime').value;
+      // const startPlace = document.getElementById('startPlace').value;
+      // const customStartPlace = document.getElementById('customStartPlace').value;
+      // const endPlace = document.getElementById('endPlace').value;
+      // const contactInfo = document.getElementById('contactInfo').value;
+      // const carSelect = document.getElementById('carSelect').value;
+      // const passengerNumber = parseInt(document.getElementById('passengerNumber').value); // Get passenger number
+      // // Price calculation logic
+      // let price = 0;
+      // const carType = 'Luxury'; // Assuming this is fixed for now
 
-      // Define price matrix
-      const priceMatrix = {
-        'Narita Airport': {
-          'Tokyo 23 Districts': 15600,
-          'Fujisan/Hakone/Kamakura': 41000,
-        },
-        'Haneda Airport': {
-          'Tokyo 23 Districts': 11000,
-          'Fujisan/Hakone/Kamakura': 32000,
-        },
-        'Tokyo 23 Districts': {
-          'Fujisan/Hakone/Kamakura': 32000,
-          'Disney': 11000,
-          'Kamakura (10 hours)': 45000,
-          'Fujisan/Hakone (10 hours)': 51000,
-          'Karuizawa/Niko': 61000,
-        },
-      };
+      // // Define price matrix
+      // const priceMatrix = {
+      //   'Narita Airport': {
+      //     'Tokyo 23 Districts': 15600,
+      //     'Fujisan/Hakone/Kamakura': 41000,
+      //   },
+      //   'Haneda Airport': {
+      //     'Tokyo 23 Districts': 11000,
+      //     'Fujisan/Hakone/Kamakura': 32000,
+      //   },
+      //   'Tokyo 23 Districts': {
+      //     'Fujisan/Hakone/Kamakura': 32000,
+      //     'Disney': 11000,
+      //     'Kamakura (10 hours)': 45000,
+      //     'Fujisan/Hakone (10 hours)': 51000,
+      //     'Karuizawa/Niko': 61000,
+      //   },
+      // };
 
-      // Look up the price
-      if (priceMatrix[startPlace] && priceMatrix[startPlace][endPlace]) {
-        price = priceMatrix[startPlace][endPlace];
-      } else {
-        alert('Sorry, we do not have a price for that route.Please add wechat on right top to ask the price!');
-        // return; // Stop the submission
-      }
+      // // Look up the price
+      // if (priceMatrix[startPlace] && priceMatrix[startPlace][endPlace]) {
+      //   price = priceMatrix[startPlace][endPlace];
+      // } else {
+      //   alert('Sorry, we do not have a price for that route.Please add wechat on right top to ask the price!');
+      //   // return; // Stop the submission
+      // }
 
-      // Log the price
-      console.log('Calculated Price:', price);
-      // Validate form inputs
-      if (!pickupDateTime || !startPlace || !endPlace || !contactInfo || !carSelect || !passengerNumber) {
-        alert('Please fill out all fields before submitting.');
-        return;
-      }
+      // // Log the price
+      // console.log('Calculated Price:', price);
+      // // Validate form inputs
+      // if (!pickupDateTime || !startPlace || !endPlace || !contactInfo || !carSelect || !passengerNumber) {
+      //   alert('Please fill out all fields before submitting.');
+      //   return;
+      // }
 
       // Transition to the admin page
       transitionToAdminPage({

@@ -94,53 +94,24 @@
       font-weight: bold;
     }
 
-   /* Login Icons Styles */
+    /* Login Icons Styles */
     .login-icons {
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 12px; /* Increased gap for better spacing */
-        padding: 10px; /* Add padding for a better visual separation */
-        background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
-        border-radius: 8px; /* Add rounded corners */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+      position: absolute;
+      top: 10px; /* Position from the top */
+      right: 20px; /* Position from the right */
+      display: flex;
+      gap: 10px; /* Space between icons */
     }
 
-    .contact-info {
-        text-align: right;
-        font-size: 1em;
-        color: white; /* Changed default color to white */
+    .login-icon {
+      width: 24px; /* Smaller size for the icons */
+      height: 24px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
-    .contact-info a {
-        color: white;
-        text-decoration: none;
-    }
-
-    .contact-info a:hover {
-        text-decoration: underline;
-    }
-
-    .contact-info div {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .contact-info div img {
-        width: 80px; /* Adjusted image size */
-        height: 80px;
-        margin-left: 5px;
-    }
-
-    .contact-info .wechat,
-    .contact-info .whatsapp,
-    .contact-info .facebook {
-        font-weight: bold;
-        color: yellow;
+    .login-icon:hover {
+      transform: scale(1.2); /* Slight zoom effect on hover */
     }
     /* Style for inline display of passenger number and price */
     .passenger-price-container {
@@ -168,32 +139,21 @@
 
   <!-- Login Icons in the Upper Right Corner -->
   <div class="login-icons">
-    <div class="contact-info">
-      <div class="wechat">
-        Wechat: TaoTaoInJapan008
-        <img src="images/wechat_qr.png" alt="WeChat QR Code">
-    </div>
-    <div class="whatsapp">
-      +81-80-4229-6309
-      <a href="https://wa.me/818042296309"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+    <img src="login/wechat.png" alt="WeChat Login" id="wechatLoginIcon" class="login-icon">
+    <img src="login/email.png" alt="Email Login" id="emailLoginIcon" class="login-icon">
   </div>
-    <div class="facebook">
-        Facebook: <a href="mailto:zhaotao8879418@gmail.com">zhaotao8879418@gmail.com</a>
-    </div>
-    </div>
-</div>
 
   <div class="container">
     <!-- Process Flow Bar -->
     <div class="process-flow">
-      <span class="process-step active" id="step1">Fill the form</span>
-      <span class="process-step" id="step2">Confirm the order</span>
-      <span class="process-step" id="step3">Choose the payment</span>
-      <span class="process-step" id="step4">Complete</span>
+      <span class="process-step <?php if ($process_step == 1) echo 'active'; ?>">Fill the form</span>
+      <span class="process-step <?php if ($process_step == 2) echo 'active'; ?>">Confirm the order</span>
+      <span class="process-step <?php if ($process_step == 3) echo 'active'; ?>">Choose the payment</span>
+      <span class="process-step <?php if ($process_step == 4) echo 'active'; ?>">Complete</span>
     </div>
 
     <h1 id="title">Car Booking</h1>
-    <form id="bookingForm">
+    <form id="bookingForm" action="book.php" method="POST">
   <!-- Pickup Date and Time -->
 <label for="pickupDateTime" id="pickupDateTimeLabel">Pickup Date and Time:</label>
 <div style="display: flex; align-items: center; gap: 10px;">
@@ -313,68 +273,68 @@
     }
 
     // Example: Update the process flow dynamically
-    document.getElementById('bookingForm').addEventListener('submit', function (event) {
-      // event.preventDefault();
-       // Clear saved form data from localStorage
-       localStorage.removeItem('formData');
-      // Get form values
-      const pickupDateTime = document.getElementById('pickupDateTime').value;
-      const startPlace = document.getElementById('startPlace').value;
-      const endPlace = document.getElementById('endPlace').value;
-      const contactInfo = document.getElementById('contactInfo').value;
-      const carSelect = document.getElementById('carSelect').value;
-      const passengerNumber = parseInt(document.getElementById('passengerNumber').value, 10);
+//     document.getElementById('bookingForm').addEventListener('submit', function (event) {
+//       // event.preventDefault();
+//        // Clear saved form data from localStorage
+//        localStorage.removeItem('formData');
+//       // Get form values
+//       const pickupDateTime = document.getElementById('pickupDateTime').value;
+//       const startPlace = document.getElementById('startPlace').value;
+//       const endPlace = document.getElementById('endPlace').value;
+//       const contactInfo = document.getElementById('contactInfo').value;
+//       const carSelect = document.getElementById('carSelect').value;
+//       const passengerNumber = parseInt(document.getElementById('passengerNumber').value, 10);
 
-      // Calculate the total price
-      let price = 0;
-      // if (carSelect === 'Voxy 2025') {
-      //     totalPrice = passengerNumber * 2500;
-      // }
+//       // Calculate the total price
+//       let price = 0;
+//       // if (carSelect === 'Voxy 2025') {
+//       //     totalPrice = passengerNumber * 2500;
+//       // }
 
-      console.log('Sending to server:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber, price,});
+//       console.log('Sending to server:', { pickupDateTime, startPlace, endPlace, contactInfo, carSelect, passengerNumber, price,});
 
-// Send the data to the backend using fetch
-fetch('/book', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      startPlace,
-      endPlace,
-      contactInfo,
-      carSelect,
-      pickupDateTime: new Date().toISOString(), // Add a default pickupDateTime
-      passengerNumber: passengerNumber, // Send passenger number to the backend
-      price: price //send total price to the backend
-    }),
-  })
-    .then((response) => response.text())
-    .then((data) => {
-      // Display the response from the server
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = data;
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      alert('An error occurred while submitting the form. Please try again.');
-    });
-      // Display the booking details
-      const resultDiv = document.getElementById('result');
-      resultDiv.innerHTML = `
-        <h3>Booking Confirmed!</h3>
-        <p><strong>Pickup Date and Time:</strong> ${pickupDateTime}</p>
-        <p><strong>Start Place:</strong> ${startPlace}</p>
-        <p><strong>End Place:</strong> ${endPlace}</p>
-        <p><strong>Contact Info:</strong> ${contactInfo}</p>
-        <p><strong>Car Selected:</strong> ${carSelect}</p>
-        <p><strong>Number of Passengers:</strong> ${passengerNumber}</p>
-        <p><strong>Total Price:</strong> ¥${price.toLocaleString()}</p>
-  `;
-      updateProcessFlow(2); // Move to "Confirm the order" step
-    });
+// // Send the data to the backend using fetch
+// fetch('/book', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       startPlace,
+//       endPlace,
+//       contactInfo,
+//       carSelect,
+//       pickupDateTime: new Date().toISOString(), // Add a default pickupDateTime
+//       passengerNumber: passengerNumber, // Send passenger number to the backend
+//       price: price //send total price to the backend
+//     }),
+//   })
+//     .then((response) => response.text())
+//     .then((data) => {
+//       // Display the response from the server
+//       const resultDiv = document.getElementById('result');
+//       resultDiv.innerHTML = data;
+//     })
+//     .catch((error) => {
+//       console.error('Error:', error);
+//       alert('An error occurred while submitting the form. Please try again.');
+//     });
+//       // Display the booking details
+//       const resultDiv = document.getElementById('result');
+//       resultDiv.innerHTML = `
+//         <h3>Booking Confirmed!</h3>
+//         <p><strong>Pickup Date and Time:</strong> ${pickupDateTime}</p>
+//         <p><strong>Start Place:</strong> ${startPlace}</p>
+//         <p><strong>End Place:</strong> ${endPlace}</p>
+//         <p><strong>Contact Info:</strong> ${contactInfo}</p>
+//         <p><strong>Car Selected:</strong> ${carSelect}</p>
+//         <p><strong>Number of Passengers:</strong> ${passengerNumber}</p>
+//         <p><strong>Total Price:</strong> ¥${price.toLocaleString()}</p>
+//   `;
+//       updateProcessFlow(2); // Move to "Confirm the order" step
+//     });
   </script>
-  <script src="https://www.paypal.com/sdk/js?client-id=AbUAcbWTCtc5VTpQ2F0isFzWd-DKXntbTVFxGcrNcqTY92MLTnhccjk38gXwsIo6IFlJ865k2F_CxdNG&currency=JPY"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=AfYVvizTDn98KE-gx2Ivb-YgBvD1PQ8iAgNP5DTsZGHyod3sfHxghBiJGhi4VyMARHz5LUyztuUQLSr3&currency=USD"></script>
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
   <script src="booking.js"></script>
