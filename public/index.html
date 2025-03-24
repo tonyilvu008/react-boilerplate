@@ -96,22 +96,24 @@
 
    /* Login Icons Styles */
     .login-icons {
-        position: absolute;
-        top: 10px;
-        right: 20px;
+        position: relative;
+        width: 90%; /* Adjust for desired width */
+        max-width: 900px; /* Maximum width */
+        margin: 0 auto 20px;
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 12px; /* Increased gap for better spacing */
-        padding: 10px; /* Add padding for a better visual separation */
-        background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background */
-        border-radius: 8px; /* Add rounded corners */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-size: 1em; /* Default font size */
     }
 
     .contact-info {
-        text-align: right;
-        font-size: 1em;
+        text-align: left; /* Modified to left align */
+        width: 45%; /* Adjust width as needed */
         color: white; /* Changed default color to white */
     }
 
@@ -127,13 +129,15 @@
     .contact-info div {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start; /* Modified to left align */
     }
 
     .contact-info div img {
-        width: 80px; /* Adjusted image size */
-        height: 80px;
-        margin-left: 5px;
+        width: 40px; /* Adjust image size */
+        height: 40px;
+        margin-right: 5px; /* Changed margin to the right */
+        /* Changed margin to the right */
+        vertical-align: middle; /* Add this line */
     }
 
     .contact-info .wechat,
@@ -170,17 +174,20 @@
   <div class="login-icons">
     <div class="contact-info">
       <div class="wechat">
-        Wechat: TaoTaoInJapan008
-        <img src="images/wechat_qr.png" alt="WeChat QR Code">
+        Wechat: TaoTaoInJapan008<img src="images/wechat.jpg" alt="Wechat"></a>
     </div>
-    <div class="whatsapp">
-      +81-80-4229-6309
-      <a href="https://wa.me/818042296309"><img src="images/whatsapp.png" alt="WhatsApp"></a>
-  </div>
-    <div class="facebook">
+    
+    <!-- <div class="facebook">
         Facebook: <a href="mailto:zhaotao8879418@gmail.com">zhaotao8879418@gmail.com</a>
+    </div> -->
     </div>
+    <div class="contact-info">
+      <div class="whatsapp">
+      whatsApp: +81-80-4229-6309
+      <a href="https://wa.me/818042296309"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+      </div>
     </div>
+
 </div>
 
   <div class="container">
@@ -378,7 +385,7 @@ fetch('/book', {
   <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
   <script src="booking.js"></script>
-  <script src="login/login.js"></script>
+  <!-- <script src="login/login.js"></script> -->
   <script src="translations.js"></script>
 </body>
 </html>
